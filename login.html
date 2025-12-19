@@ -1,4 +1,4 @@
-<?php
+
 session_start();
 require 'config.php';
 
@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     } else { $erreur = "Identifiants invalides"; }
 }
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -38,3 +37,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
+
