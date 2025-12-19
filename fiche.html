@@ -1,4 +1,4 @@
-<?php 
+
 require 'config.php'; 
 $id = intval($_GET['id']);
 $res = mysqli_query($conn, "SELECT * FROM candidats WHERE id = $id");
@@ -7,7 +7,6 @@ $c = mysqli_fetch_assoc($res);
 if (!$c) { die("Candidat introuvable"); }
 
 $color = ($c['score'] >= 75) ? '#10b981' : (($c['score'] >= 50) ? '#f59e0b' : '#ef4444');
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,3 +54,4 @@ $color = ($c['score'] >= 75) ? '#10b981' : (($c['score'] >= 50) ? '#f59e0b' : '#
     </div>
 </body>
 </html>
+
