@@ -1,4 +1,4 @@
-<?php 
+
 session_start(); 
 if (!isset($_SESSION['logged_in'])) { header("Location: login.php"); exit(); }
 require 'config.php'; 
@@ -16,8 +16,7 @@ $moyenne = $moy_res['moy'] ?? 0;
 
 // 4. Données pour le graphique (Répartition)
 $potentiels = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as nb FROM candidats WHERE score >= 50 AND score < 75"))['nb'] ?? 0;
-$faibles = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as nb FROM candidats WHERE score < 50"))['nb'] ?? 0;
-?>
+$faibles = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as nb FROM candidats WHERE score < 50"))['nb'] ?? 0
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -62,8 +61,8 @@ $faibles = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as nb FROM ca
     <div class="header">
         <h1>📊 ATS Expert Analytics</h1>
         <div>
-            <a href="index.php" class="btn btn-blue">+ Nouveau Candidat</a>
-            <a href="logout.php" class="btn btn-logout">Déconnexion</a>
+            <a href="index.html" class="btn btn-blue">+ Nouveau Candidat</a>
+            <a href="logout.html" class="btn btn-logout">Déconnexion</a>
         </div>
     </div>
 
@@ -141,3 +140,4 @@ new Chart(ctx, {
 
 </body>
 </html>
+
