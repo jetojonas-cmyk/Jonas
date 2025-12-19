@@ -1,0 +1,43 @@
+<?php
+session_start();
+if (!isset($_SESSION['logged_in'])) { header("Location: login.php"); exit(); }
+require 'config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = mysqli_real_escape_string($conn, $_POST['candidate_name']);
+    $job = mysqli_real_escape_string($conn, $_POST['job_title']);
+    $city = mysqli_real_escape_string($conn, $_POST['target_city']);
+    $etudes = mysqli_real_escape_string($conn, $_POST['min_etudes']);
+    $skills_input = strtolower($_POST['skills_required']);
+    $skills_array = array_map('trim', explode(',', $skills_input));
+    $cv_text = strtolower($_POST['cv_content']);
+
+    $found = [];
+    foreach ($skills_array as $skill) {
+        if (!empty($skill) && strpos($cv_text, $skill) !== false) { $found[] = $skill; }
+    }
+    
+    $score = (count($skills_array) > 0) ? (count($found) / count($skills_array)) * 100 : 0;
+    if (!empty($city) && strpos($cv_text, strtolower($city)) !== false) $score += 15;
+    if (strpos($cv_text, strtolower($etudes)) !== false) $score += 10;
+    
+    $score_final = min(round($score), 100);
+    $skills_s = mysqli_real_escape_string($conn, implode(', ', $found));
+
+    $sql = "INSERT INTO candidats (nom_candidat, nom_poste, niveau_etudes, ville, score, competences_trouvees) 
+            VALUES ('$name', '$job', '$etudes', '$city', $score_final, '$skills_s')";
+    
+    mysqli_query($conn, $sql);
+
+    // OPTIONNEL : Alerte par mail si Score >= 85%
+    if ($score_final >= 85) {
+        $dest = "ton-email@test.com"; // Change ici
+        $sujet = "🔥 TOP CANDIDAT détecté !";
+        $msg = "Profil : $name\nPoste : $job\nScore : $score_final%";
+        @mail($dest, $sujet, $msg);
+    }
+
+    header("Location: liste.php");
+    exit();
+}
+?>

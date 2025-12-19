@@ -1,0 +1,14 @@
+<?php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "ats_db";
+
+// Création de la connexion
+$conn = mysqli_connect($host, $user, $pass, $dbname);
+
+// Vérification
+if (!$conn) {
+    die("La connexion a échoué : " . mysqli_connect_error());
+}
+?>

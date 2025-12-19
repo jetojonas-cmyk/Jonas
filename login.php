@@ -1,0 +1,40 @@
+<?php
+session_start();
+require 'config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = mysqli_real_escape_string($conn, $_POST['identifiant']);
+    $pass = $_POST['mot_de_passe'];
+
+    $res = mysqli_query($conn, "SELECT * FROM utilisateurs WHERE identifiant = '$user' AND mot_de_passe = '$pass'");
+    if (mysqli_num_rows($res) > 0) {
+        $_SESSION['logged_in'] = true;
+        header("Location: liste.php");
+        exit();
+    } else { $erreur = "Identifiants invalides"; }
+}
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ATS Expert - Connexion</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 12px; width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🔒 Accès Restreint</h2>
+        <?php if(isset($erreur)) echo "<p style='color:red'>$erreur</p>"; ?>
+        <form method="POST">
+            <input type="text" name="identifiant" placeholder="Identifiant" required>
+            <input type="password" name="mot_de_passe" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
+</body>
+</html>
